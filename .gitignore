@@ -1,7 +1,19 @@
-.DS_Store
+# Environnements
+.env
+
+# Python
 __pycache__/
 *.pyc
+
+# Jupyter
 .ipynb_checkpoints/
-.venv/
+
+# Data & modèles
 data/
+models/
+*.pt
 *.pth
+*.ckpt
+
+# OS
+.DS_Store
