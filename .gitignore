@@ -15,5 +15,9 @@ models/
 *.pth
 *.ckpt
 
+
+# Docs
+~$report.docx
+
 # OS
 .DS_Store
