@@ -1,20 +1,14 @@
-# Environnements
-.env
-
-# Python
+# python
 __pycache__/
 *.pyc
-
-# Jupyter
 .ipynb_checkpoints/
+.env
 
 # Data & modèles
 data/
 models/
-*.pt
-*.pth
-*.ckpt
-
+!data/.gitkeep
+!models/.gitkeep
 
 # Docs
 ~$report.docx
