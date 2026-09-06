@@ -5,13 +5,13 @@ __pycache__/
 .env
 
 # Data & modèles
-data/
-models/
+data/*
+models/*
 !data/.gitkeep
 !models/.gitkeep
 
 # Docs
-~$report.docx
+~$*.docx
 
 # OS
 .DS_Store
