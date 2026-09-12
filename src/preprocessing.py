@@ -10,7 +10,7 @@ from src.config import (
 
 
 def load_splits():
-    "Download the dataset and build the train/val/test splits."
+    "Download the dataset and build the train/val/test splits"
     raw = load_dataset(DATASET_NAME, DATASET_CONFIG, cache_dir=DATA_RAW)
     split = raw["train"].train_test_split(test_size=VAL_SIZE, seed=SEED)
     return DatasetDict({
@@ -21,7 +21,7 @@ def load_splits():
 
 
 def format_example(example):
-    "Build the prompt string and the target string for one example."
+    "Build the prompt string and the target string for one example"
     return {
         "input_text": PROMPT_TEMPLATE.format(
             question=example["question"],
@@ -32,7 +32,7 @@ def format_example(example):
 
 
 def tokenize_example(batch, tokenizer):
-    "Tokenize a batch of prompts and targets."
+    "Tokenize a batch of prompts and targets"
     model_inputs = tokenizer(
         batch["input_text"],
         max_length=MAX_INPUT_LENGTH,
@@ -48,7 +48,7 @@ def tokenize_example(batch, tokenizer):
 
 
 def build_processed_dataset():
-    "Run the full pipeline and save the result to data/processed/."
+    "Run the full pipeline and save the result to data/processed/"
     tokenizer = AutoTokenizer.from_pretrained(MODEL_BASE)
 
     ds = load_splits()
@@ -60,7 +60,7 @@ def build_processed_dataset():
 
 
 def load_processed():
-    "Load the processed dataset, building it first if it doesn't exist yet."
-    if DATA_PROCESSED.exists():
+    "Load the processed dataset, building it first if it doesn't exist"
+    if (DATA_PROCESSED / "dataset_dict.json").exists():
         return load_from_disk(DATA_PROCESSED)
     return build_processed_dataset()

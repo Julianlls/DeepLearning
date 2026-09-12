@@ -20,6 +20,7 @@ PROMPT_TEMPLATE = "question: {question}  context: {context}"
 MAX_INPUT_LENGTH = 512
 MAX_TARGET_LENGTH = 32
 MAX_GEN_TOKENS = 48
+EVAL_BATCH_SIZE = 8
 
 # Reproducibility
 SEED = 42
