@@ -44,7 +44,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #### **Results**
 
 
-| Model | Precision | EM | token_precision | token_recall | F1 | <> F1 vs.FP32 |
+| Model | Precision | EM | token_precision | token_recall | F1 | F1 vs.FP32 |
 |---|---|---|---|---|---|---|
 | flan-t5-base | FP32 | 0.4237 | 0.5587 | 0.5553 | 0.5333 | - |
 | flan-t5-base | BF16 | 0.4257 | 0.5600 | 0.5562 | 0.5342 | +0.001 |
