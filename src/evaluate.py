@@ -81,10 +81,10 @@ def compute_metrics(predictions: list, references: list) -> dict:
     n = len(predictions)
 
     return {
-        "exact_match": round(em_total / n,2),
-        "precision": round(precision_total / n,2),
-        "recall": round(recall_total / n,2),
-        "f1": round(f1_total / n,2),
+        "exact_match": round(em_total / n,5),
+        "precision": round(precision_total / n,5),
+        "recall": round(recall_total / n,5),
+        "f1": round(f1_total / n,5),
         "n_examples": n,
     }
 
@@ -124,22 +124,10 @@ def generate_predictions(model, tokenizer, dataset,
     return predictions
 
 
-def save_predictions(predictions, model_name, state, precision_mode):
-    "Write predictions to results/ under a filename identifying the grid cell"
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    path = RESULTS_DIR / f"preds_{model_name}_{state}_{precision_mode}.json"
-
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(predictions, f, ensure_ascii=False, indent=2)
-
-    return path
-
-
 def evaluate_model(model, tokenizer, dataset,
                    model_name, state, precision_mode,
                    batch_size=EVAL_BATCH_SIZE,
-                   max_new_tokens=MAX_GEN_TOKENS,
-                   save=True):
+                   max_new_tokens=MAX_GEN_TOKENS):
 
     predictions = generate_predictions(
         model, tokenizer, dataset,
@@ -156,8 +144,5 @@ def evaluate_model(model, tokenizer, dataset,
         "precision_mode": precision_mode,
         **metrics,
     }
-
-    if save:
-        save_predictions(predictions, model_name, state, precision_mode)
 
     return results_row, predictions

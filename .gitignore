@@ -6,7 +6,6 @@ __pycache__/
 
 # Data & modèles
 data/*
-results/*
 models/*
 !data/.gitkeep
 !models/.gitkeep
