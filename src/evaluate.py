@@ -27,7 +27,7 @@ def normalize_answer(s: str) -> str:
 
 
 def exact_match_score(prediction: str, target: str) -> int:
-    #1 if the two strings match after normalization, 0 otherwise.
+    #1 if the two strings match after normalization, 0 otherwise
     return int(normalize_answer(prediction) == normalize_answer(target))
 
 
@@ -36,7 +36,7 @@ def f1_score(prediction: str, target: str) -> dict:
     pred_tokens = normalize_answer(prediction).split()
     target_tokens = normalize_answer(target).split()
 
-    # Empty-string guard: full credit only if both sides are empty.
+    # Empty-string guard: full credit only if both sides are empty
     if len(pred_tokens) == 0 or len(target_tokens) == 0:
         score = float(pred_tokens == target_tokens)
         return {"precision": score, "recall": score, "f1": score}
