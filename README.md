@@ -36,10 +36,7 @@ The splits are the following: 27k/3k/3k train/val/test, done with 42 as the spli
 
 #### **Fine-tuning**
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+We fine-tune **flan-t5-base only**, in **FP32** on a Colab T4 (full fine-tuning, all parameters; gradient checkpointing to fit the T4, so no layer freezing was needed). We reuse the `load_processed()` splits (train 27k / val 3k) — **no re-split, no re-tokenization** — training directly on the dataset's `input_ids` / `attention_mask` / `labels` with the same prompt template as the baseline. A **single** training run is performed; quantization is applied afterwards to this checkpoint. The learning rate is selected on **val F1** (computed with `evaluate.py`, greedy, `max_new_tokens=48`) over {5e-5, 1e-4, 3e-4} → **5e-5, 3 epochs**. The fine-tuned checkpoint is published on the Hugging Face Hub: `Smambu/flan-t5-base-adversarialqa-ft`.
 
 #### **Results**
 
@@ -54,10 +51,10 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 | flan-t5-large | BF16 | 0.5490 | 0.6855 | 0.6983 | 0.6650 | +0.001 |
 | flan-t5-large | INT8 | 0.5490 | 0.6848 | 0.6984 | 0.6647 | +0.001 |
 | flan-t5-large | INT4 | 0.5303 | 0.6687 | 0.6806 | 0.6476 | −0.016 |
-| flan-t5-base-finetuned | FP32 | XXXX | XXXX | XXXX | XXXX | XXXX |
-| flan-t5-base-finetuned | BF16 | XXXX | XXXX | XXXX | XXXX | XXXX |
-| flan-t5-base-finetuned | INT8 | XXXX | XXXX | XXXX | XXXX | XXXX |
-| flan-t5-base-finetuned | INT4 | XXXX | XXXX | XXXX | XXXX | XXXX |
+| flan-t5-base-finetuned | FP32 | 0.4440 | 0.5674 | 0.5840 | 0.5501 | - |
+| flan-t5-base-finetuned | BF16 | TBD | TBD | TBD | TBD | TBD |
+| flan-t5-base-finetuned | INT8 | TBD | TBD | TBD | TBD | TBD |
+| flan-t5-base-finetuned | INT4 | TBD | TBD | TBD | TBD | TBD |
 
 #### **Interpretation prior fine-tuning**
 
@@ -68,10 +65,11 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #### **Interpretation post fine-tuning**
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+* **Fine-tuning helps, but modestly.** Measured on the **test** split, F1 goes from 0.533 (raw base) to **0.550** (fine-tuned) and EM from 0.424 to **0.444** (+0.017 F1, +0.020 EM). The gain is small because flan-t5-base is already instruction-tuned for extractive QA and AdversarialQA is adversarial by design, so the headroom is limited; the model does not degrade.
+
+* **The gain must be read on test, not on val.** The raw base scores 0.718 F1 on our `val` but only 0.533 on `test`. Our `val` is carved from the original train (which flan-t5's instruction tuning most likely already covered), so it is contaminated and saturated — it overstates performance and cannot show the fine-tuning effect. The held-out `test` (the original validation split) is the honest yardstick.
+
+* **Quantization of the fine-tuned model** (BF16 / INT8 / INT4): *to be completed with the quantization grid.* The key comparison is whether the per-precision F1 drop matches the one measured on the raw base (e.g. INT4 −0.024 F1).
 
 #### **Repository structure**
 
