@@ -52,9 +52,9 @@ We fine-tune **flan-t5-base only**, in **FP32** on a Colab T4 (full fine-tuning,
 | flan-t5-large | INT8 | 0.5490 | 0.6848 | 0.6984 | 0.6647 | +0.001 |
 | flan-t5-large | INT4 | 0.5303 | 0.6687 | 0.6806 | 0.6476 | −0.016 |
 | flan-t5-base-finetuned | FP32 | 0.4440 | 0.5674 | 0.5840 | 0.5501 | - |
-| flan-t5-base-finetuned | BF16 | TBD | TBD | TBD | TBD | TBD |
-| flan-t5-base-finetuned | INT8 | TBD | TBD | TBD | TBD | TBD |
-| flan-t5-base-finetuned | INT4 | TBD | TBD | TBD | TBD | TBD |
+| flan-t5-base-finetuned | BF16 | 0.4423 | 0.5661 | 0.5838 | 0.5490 | −0.001 |
+| flan-t5-base-finetuned | INT8 | 0.4453 | 0.5674 | 0.5856 | 0.5513 | +0.001 |
+| flan-t5-base-finetuned | INT4 | 0.4340 | 0.5606 | 0.5618 | 0.5379 | −0.012 |
 
 #### **Interpretation prior fine-tuning**
 
