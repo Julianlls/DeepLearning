@@ -8,6 +8,7 @@ TITLE = "Project Deep Learning DSTI"
 APP_DIR = Path(__file__).parent
 DATA_DIR = APP_DIR / "data"
 STYLE_FILE = APP_DIR / "style.css"
+FAVICON_FILE = APP_DIR / "favicon" / "favicon.ico"
 
 MODEL_FT = "Smambu/flan-t5-base-adversarialqa-ft"
 MODELS = {

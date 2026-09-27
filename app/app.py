@@ -22,7 +22,7 @@ from app.cards import answer_card, model_column, results_page
 from app.charts import results_figure
 from app.data import EXAMPLES, examples_table, results_table
 from app.inference import encode, generate, preload_models
-from app.settings import DEMO_EXAMPLE_IDS, MODELS, PRECISIONS, STYLE_FILE, TITLE
+from app.settings import DEMO_EXAMPLE_IDS, FAVICON_FILE, MODELS, PRECISIONS, STYLE_FILE, TITLE
 
 # Black and white: no colored label chips, inverted primary button in dark mode
 THEME = gr.themes.Base(
@@ -176,4 +176,4 @@ with gr.Blocks(title=TITLE) as demo:
 if __name__ == "__main__":
     if os.environ.get("PRELOAD_MODELS") == "1":
         threading.Thread(target=preload_models, daemon=True).start()
-    demo.launch(theme=THEME, css_paths=[STYLE_FILE], footer_links=[])
+    demo.launch(theme=THEME, css_paths=[STYLE_FILE], favicon_path=FAVICON_FILE, footer_links=[])
