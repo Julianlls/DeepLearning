@@ -147,4 +147,4 @@ with gr.Blocks(title=TITLE) as demo:
 if __name__ == "__main__":
     if os.environ.get("PRELOAD_MODELS") == "1":
         threading.Thread(target=preload_models, daemon=True).start()
-    demo.launch(theme=THEME, css_paths=[STYLE_FILE])
+    demo.launch(theme=THEME, css_paths=[STYLE_FILE], footer_links=[])
