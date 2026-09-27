@@ -1,14 +1,22 @@
 """Demo settings: models, precisions, data files and links."""
+import os
 from pathlib import Path
 
 from src.config import MODEL_BASE
 
 TITLE = "Project Deep Learning DSTI"
+DESCRIPTION = (
+    "How much does quantization cost a language model? Live demo comparing flan-t5 "
+    "in FP32, BF16 and INT8 on the AdversarialQA question answering dataset."
+)
+# Link previews (Discord, Slack...) need absolute URLs
+PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://flant5.sofianechaoui.com").rstrip("/")
 
 APP_DIR = Path(__file__).parent
 DATA_DIR = APP_DIR / "data"
 STYLE_FILE = APP_DIR / "style.css"
 FAVICON_FILE = APP_DIR / "favicon" / "favicon.ico"
+OG_IMAGE_FILE = APP_DIR / "static" / "og-image.png"
 
 MODEL_FT = "Smambu/flan-t5-base-adversarialqa-ft"
 MODELS = {

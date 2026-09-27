@@ -7,6 +7,7 @@ Layout and event wiring only. The rest of the app lives in:
     charts.py     benchmark charts
     cards.py      HTML of the live demo answers
     content.py    static texts
+    opengraph.py  link previews (Discord, Slack...)
     style.css     page style
 
 Run locally from the repo root:  python -m app.app
@@ -16,13 +17,19 @@ import threading
 
 import gradio as gr
 import pandas as pd
+import uvicorn
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
 from app import content
 from app.cards import answer_card, model_column, results_page
 from app.charts import results_figure
 from app.data import EXAMPLES, examples_table, results_table
 from app.inference import encode, generate, preload_models
-from app.settings import DEMO_EXAMPLE_IDS, FAVICON_FILE, MODELS, PRECISIONS, STYLE_FILE, TITLE
+from app.opengraph import OG_IMAGE_PATH, OpenGraphMiddleware
+from app.settings import (
+    DEMO_EXAMPLE_IDS, FAVICON_FILE, MODELS, OG_IMAGE_FILE, PRECISIONS, STYLE_FILE, TITLE,
+)
 
 # Black and white: no colored label chips, inverted primary button in dark mode
 THEME = gr.themes.Base(
@@ -173,7 +180,26 @@ with gr.Blocks(title=TITLE) as demo:
     gr.HTML(content.FOOTER)
 
 
+def create_server():
+    """Gradio mounted in FastAPI, so the page can serve its own link-preview tags and image."""
+    server = FastAPI()
+
+    @server.get(OG_IMAGE_PATH, include_in_schema=False)
+    def og_image():
+        return FileResponse(OG_IMAGE_FILE, media_type="image/png")
+
+    server = gr.mount_gradio_app(
+        server, demo, path="/",
+        theme=THEME, css_paths=[STYLE_FILE], favicon_path=FAVICON_FILE, footer_links=[],
+    )
+    return OpenGraphMiddleware(server)
+
+
 if __name__ == "__main__":
     if os.environ.get("PRELOAD_MODELS") == "1":
         threading.Thread(target=preload_models, daemon=True).start()
-    demo.launch(theme=THEME, css_paths=[STYLE_FILE], favicon_path=FAVICON_FILE, footer_links=[])
+    uvicorn.run(
+        create_server(),
+        host=os.environ.get("GRADIO_SERVER_NAME", "127.0.0.1"),
+        port=int(os.environ.get("GRADIO_SERVER_PORT", "7860")),
+    )
