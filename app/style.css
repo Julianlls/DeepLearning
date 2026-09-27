@@ -9,6 +9,13 @@
 .hero a { color: inherit; }
 .theme-toggle { margin-top: 28px; }
 
+/* Choice groups as toggle buttons: the filled / outlined state replaces the tick box.
+   The input stays focusable for keyboard users, it is only visually hidden. */
+.toggle-group input[type="checkbox"], .toggle-group input[type="radio"] {
+  position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.toggle-group label { cursor: pointer; border-radius: 8px !important; font-weight: 500; }
+.toggle-group label:has(input:focus-visible) { outline: 2px solid var(--body-text-color); outline-offset: 2px; }
+
 /* Live demo answers */
 .expected { margin-bottom: 12px; font-size: 0.95rem; }
 .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }

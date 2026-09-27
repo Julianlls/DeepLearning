@@ -44,11 +44,29 @@ THEME = gr.themes.Base(
     button_primary_text_color_dark="*neutral_900",
     checkbox_background_color_selected="*neutral_900",
     checkbox_background_color_selected_dark="*neutral_50",
-    checkbox_label_background_fill_selected="*neutral_100",
-    checkbox_label_background_fill_selected_dark="*neutral_800",
-    checkbox_label_text_color_selected="*neutral_900",
-    checkbox_label_text_color_selected_dark="*neutral_50",
+    # Choice groups look like toggle buttons: outlined when off, filled when on
+    checkbox_label_background_fill="transparent",
+    checkbox_label_background_fill_dark="transparent",
+    checkbox_label_background_fill_hover="*neutral_100",
+    checkbox_label_background_fill_hover_dark="*neutral_800",
+    checkbox_label_border_width="1px",
+    checkbox_label_border_color="*neutral_300",
+    checkbox_label_border_color_dark="*neutral_600",
+    checkbox_label_border_color_selected="*neutral_900",
+    checkbox_label_border_color_selected_dark="*neutral_50",
+    checkbox_label_background_fill_selected="*neutral_900",
+    checkbox_label_background_fill_selected_dark="*neutral_50",
+    checkbox_label_text_color_selected="white",
+    checkbox_label_text_color_selected_dark="*neutral_900",
 )
+
+
+def keep_one_selected(selected: list, previous: list):
+    """Refuse an empty selection: put back the last selected option."""
+    if not selected:
+        gr.Warning("At least one option must stay selected.")
+        return previous, previous
+    return selected, selected
 
 
 def run_demo(context: str, question: str, gold: str, models: list, precisions: list) -> str:
@@ -83,11 +101,21 @@ def build_demo_tab():
                 label="Expected answer (optional)", placeholder="Fill it to score each configuration"
             )
         with gr.Column(scale=2):
-            models_box = gr.CheckboxGroup(list(MODELS), value=list(MODELS), label="Models")
-            precisions_box = gr.CheckboxGroup(PRECISIONS, value=PRECISIONS, label="Precisions")
+            models_box = gr.CheckboxGroup(
+                list(MODELS), value=list(MODELS), label="Models",
+                info="Click to turn a model on or off", elem_classes="toggle-group",
+            )
+            precisions_box = gr.CheckboxGroup(
+                PRECISIONS, value=PRECISIONS, label="Precisions",
+                info="Click to turn a precision on or off", elem_classes="toggle-group",
+            )
             run_button = gr.Button("Answer", variant="primary", size="lg")
             with gr.Accordion("How it works", open=False):
                 gr.Markdown(content.HOW_IT_WORKS)
+
+    for choices_box in (models_box, precisions_box):
+        previous = gr.State(choices_box.value)
+        choices_box.input(keep_one_selected, inputs=[choices_box, previous], outputs=[choices_box, previous])
 
     output_html = gr.HTML(content.PLACEHOLDER)
     gr.Examples(
@@ -106,7 +134,8 @@ def build_demo_tab():
 def build_results_tab():
     gr.Markdown(content.BENCHMARK_INTRO)
     metric_radio = gr.Radio(
-        [("F1", "f1"), ("Exact Match", "exact_match")], value="f1", label="Metric", container=False
+        [("F1", "f1"), ("Exact Match", "exact_match")], value="f1", label="Metric",
+        container=False, elem_classes="toggle-group",
     )
     plot = gr.Plot(value=results_figure("f1"), show_label=False)
     metric_radio.change(results_figure, inputs=metric_radio, outputs=plot)
