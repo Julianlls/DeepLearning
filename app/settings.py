@@ -3,6 +3,8 @@ from pathlib import Path
 
 from src.config import MODEL_BASE
 
+TITLE = "Project Deep Learning DSTI"
+
 APP_DIR = Path(__file__).parent
 DATA_DIR = APP_DIR / "data"
 STYLE_FILE = APP_DIR / "style.css"

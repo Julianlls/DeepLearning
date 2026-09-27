@@ -22,12 +22,32 @@ from app.cards import answer_card, model_column, results_page
 from app.charts import results_figure
 from app.data import EXAMPLES, examples_table, results_table
 from app.inference import encode, generate, preload_models
-from app.settings import DEMO_EXAMPLE_IDS, MODELS, PRECISIONS, STYLE_FILE
+from app.settings import DEMO_EXAMPLE_IDS, MODELS, PRECISIONS, STYLE_FILE, TITLE
 
-THEME = gr.themes.Soft(
-    primary_hue="indigo",
-    neutral_hue="slate",
+# Black and white: no colored label chips, inverted primary button in dark mode
+THEME = gr.themes.Base(
+    primary_hue="neutral",
+    neutral_hue="neutral",
     font=[gr.themes.GoogleFont("Inter"), "ui-sans-serif", "system-ui", "sans-serif"],
+).set(
+    block_label_background_fill="transparent",
+    block_label_background_fill_dark="transparent",
+    block_label_text_color="*neutral_500",
+    block_label_text_color_dark="*neutral_400",
+    block_title_text_color="*neutral_500",
+    block_title_text_color_dark="*neutral_400",
+    button_primary_background_fill="*neutral_900",
+    button_primary_background_fill_hover="*neutral_700",
+    button_primary_text_color="white",
+    button_primary_background_fill_dark="*neutral_50",
+    button_primary_background_fill_hover_dark="*neutral_200",
+    button_primary_text_color_dark="*neutral_900",
+    checkbox_background_color_selected="*neutral_900",
+    checkbox_background_color_selected_dark="*neutral_50",
+    checkbox_label_background_fill_selected="*neutral_100",
+    checkbox_label_background_fill_selected_dark="*neutral_800",
+    checkbox_label_text_color_selected="*neutral_900",
+    checkbox_label_text_color_selected_dark="*neutral_50",
 )
 
 
@@ -104,17 +124,23 @@ def build_predictions_tab(demo_inputs, tabs):
     table.select(pick_example, inputs=table, outputs=[*demo_inputs, tabs])
 
 
-with gr.Blocks(title="flan-t5 quantization demo") as demo:
-    gr.HTML(content.HERO)
+with gr.Blocks(title=TITLE) as demo:
+    with gr.Row(elem_classes="header-row"):
+        gr.HTML(content.HERO)
+        theme_button = gr.Button(
+            "Light / Dark", variant="secondary", size="sm", scale=0, min_width=110,
+            elem_classes="theme-toggle",
+        )
+    theme_button.click(None, js=content.TOGGLE_THEME_JS)
+    demo.load(None, js=content.RESTORE_THEME_JS)
+
     with gr.Tabs() as tabs:
-        with gr.Tab("🔍 Live demo", id="demo"):
+        with gr.Tab("Live demo", id="demo"):
             demo_inputs = build_demo_tab()
-        with gr.Tab("📊 Benchmark results", id="results"):
+        with gr.Tab("Benchmark results", id="results"):
             build_results_tab()
-        with gr.Tab("🗂 Stored predictions", id="predictions"):
+        with gr.Tab("Stored predictions", id="predictions"):
             build_predictions_tab(demo_inputs, tabs)
-        with gr.Tab("ℹ️ About", id="about"):
-            gr.Markdown(content.ABOUT)
     gr.HTML(content.FOOTER)
 
 

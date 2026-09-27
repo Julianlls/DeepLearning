@@ -26,8 +26,8 @@ def answer_card(precision: str, result: dict, gold: str) -> str:
       </div>
       <div class="answer-text">{answer}</div>
       <div class="card-stats">
-        <span>⏱ {result["latency_ms"]:.0f} ms</span>
-        <span>💾 {result["size_mb"]:.0f} MB</span>
+        <span>Latency {result["latency_ms"]:.0f} ms</span>
+        <span>Size {result["size_mb"]:.0f} MB</span>
       </div>
     </div>"""
 
