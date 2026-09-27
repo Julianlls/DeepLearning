@@ -3,6 +3,18 @@
 
 **This project measures what that cost in accuracy. We evaluate an encoder-decoder model: flan-t5, on a generative question answering task at four precision levels and we look at two things: whether the degradation depends on model size, i.e. if a larger model would have a less important degradation of performance while precision decreases, and whether the degradation depends on fine-tuning on the task.**
 
+## **[Live demo](https://flant5.sofianechaoui.com/)**
+
+The project is deployed in production and can be tested online, with no installation: **[try the demo](https://flant5.sofianechaoui.com/)**.
+
+The app has three tabs:
+
+* **Live demo**: ask a question about a text and compare the raw and fine-tuned flan-t5-base side by side in FP32, BF16 and INT8, with the answer, latency and model size of each configuration
+* **Benchmark results**: F1 and Exact Match of the 12 evaluated configurations
+* **Stored predictions**: model answers on the test split, which can be loaded into the live demo
+
+It is self-hosted on a CPU server (Docker, HTTPS). See the [Deployment](#deployment-live-demo) section for details.
+
 
 ## **About the dataset**
 
