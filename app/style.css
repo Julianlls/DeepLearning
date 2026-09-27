@@ -1,0 +1,38 @@
+/* Uses Gradio theme variables so the page follows the light / dark mode */
+.gradio-container { max-width: 1180px !important; margin: 0 auto !important; }
+
+/* Header */
+.hero { padding: 28px 8px 8px; }
+.hero .eyebrow { color: var(--color-accent); font-weight: 600; font-size: 0.8rem;
+  letter-spacing: 0.08em; text-transform: uppercase; }
+.hero h1 { font-size: 2rem; line-height: 1.2; margin: 6px 0 10px; }
+.hero p { font-size: 1.05rem; max-width: 760px; color: var(--body-text-color-subdued); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; margin-top: 20px; }
+.kpi { border: 1px solid var(--border-color-primary); border-radius: 12px; padding: 14px 16px;
+  background: var(--block-background-fill); }
+.kpi-value { font-size: 1.6rem; font-weight: 700; color: var(--color-accent); }
+.kpi-label { font-size: 0.85rem; color: var(--body-text-color-subdued); margin-top: 2px; }
+
+/* Live demo answers */
+.expected { margin-bottom: 12px; font-size: 0.95rem; }
+.results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.model-column h3 { margin: 0; font-size: 1.1rem; }
+.model-column .repo { font-size: 0.8rem; color: var(--body-text-color-subdued); margin-bottom: 10px; }
+.answer-card { border: 1px solid var(--border-color-primary); border-radius: 12px;
+  padding: 12px 14px; margin-bottom: 10px; background: var(--block-background-fill); }
+.card-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.card-head .precision { font-weight: 700; }
+.card-head .bits { font-size: 0.8rem; color: var(--body-text-color-subdued); }
+.verdict { margin-left: auto; font-size: 0.78rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.verdict.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
+.verdict.partial { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+.verdict.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+.answer-text { font-size: 1.15rem; margin: 8px 0; word-break: break-word; }
+.card-stats { display: flex; gap: 16px; font-size: 0.82rem; color: var(--body-text-color-subdued); }
+.placeholder { color: var(--body-text-color-subdued); padding: 24px 0; text-align: center; }
+
+/* Footer */
+.footer { text-align: center; font-size: 0.85rem; padding: 18px 0 6px;
+  color: var(--body-text-color-subdued); }
+.footer a { color: inherit; }

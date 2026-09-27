@@ -19,7 +19,8 @@ jobs:
       - name: Smoke test (build the UI, score one prediction)
         run: |
           python -c "
-          from app.app import demo, results_table
+          from app.app import demo
+          from app.data import results_table
           from src.evaluate import compute_metrics
           assert len(results_table()) == 12
           assert compute_metrics(['Town Moor'], ['the Town Moor'])['exact_match'] == 1.0
