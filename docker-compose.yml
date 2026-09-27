@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    image: flan-t5-quantization:latest
+    container_name: flan-t5-quantization
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    volumes:
+      # Model weights downloaded from the Hub survive rebuilds
+      - hf-cache:/cache/huggingface
+    mem_limit: 8g
+
+volumes:
+  hf-cache:

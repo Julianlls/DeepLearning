@@ -89,6 +89,19 @@ Expect a noticeable runtime on the baseline evaluation.
 To run locally, all packages are listed in `requirements.txt`. Note that INT8 and INT4 runs require CUDA and will not work on Apple Silicon.
 
 
+#### **Deployment (live demo)**
+
+An interactive Gradio demo is self-hosted in Docker on a Proxmox server, behind a Caddy reverse proxy that handles HTTPS. It lets you ask questions to the raw and fine-tuned flan-t5-base in FP32, BF16 and INT8, and shows the answer, latency and model size for each precision. It also displays the benchmark results and the stored predictions.
+
+* `app/`: the Gradio app, which reuses `src/config.py` (prompt, lengths) and `src/evaluate.py` (metrics)
+* `Dockerfile`, `docker-compose.yml`: CPU-only production image. All models are preloaded at startup, and downloaded weights are kept in a volume.
+* `.github/workflows/ci.yml`: on every push, smoke-tests the app and builds the image
+
+bitsandbytes needs CUDA, so the live INT8 option uses PyTorch dynamic quantization on CPU. The INT4 figures come from the benchmark run.
+
+Run with Docker: `docker compose up -d --build`, then open http://localhost:7860.
+Run without Docker, from the repo root: `pip install gradio -r app/requirements.txt`, then `python -m app.app`.
+
 #### **Limitations**
 
 * zero-shot scores on an adversarial dataset, made difficult to solve on purpose.

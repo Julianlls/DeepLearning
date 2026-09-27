@@ -1,0 +1,13 @@
+model,precision,exact_match,token_precision,token_recall,f1
+flan-t5-base,FP32,0.4237,0.5587,0.5553,0.5333
+flan-t5-base,BF16,0.4257,0.5600,0.5562,0.5342
+flan-t5-base,INT8,0.4220,0.5571,0.5554,0.5323
+flan-t5-base,INT4,0.4033,0.5404,0.5249,0.5094
+flan-t5-large,FP32,0.5483,0.6842,0.6968,0.6639
+flan-t5-large,BF16,0.5490,0.6855,0.6983,0.6650
+flan-t5-large,INT8,0.5490,0.6848,0.6984,0.6647
+flan-t5-large,INT4,0.5303,0.6687,0.6806,0.6476
+flan-t5-base-finetuned,FP32,0.4440,0.5674,0.5840,0.5501
+flan-t5-base-finetuned,BF16,0.4423,0.5661,0.5838,0.5490
+flan-t5-base-finetuned,INT8,0.4453,0.5674,0.5856,0.5513
+flan-t5-base-finetuned,INT4,0.4340,0.5606,0.5618,0.5379

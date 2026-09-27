@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install app dependencies (CPU)
+        run: pip install gradio==6.28.0 -r app/requirements.txt
+      - name: Smoke test (build the UI, score one prediction)
+        run: |
+          python -c "
+          from app.app import demo, results_table
+          from src.evaluate import compute_metrics
+          assert len(results_table()) == 12
+          assert compute_metrics(['Town Moor'], ['the Town Moor'])['exact_match'] == 1.0
+          print('ok')
+          "
+
+  docker-build:
+    needs: smoke-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the production image
+        run: docker build -t flan-t5-quantization .
