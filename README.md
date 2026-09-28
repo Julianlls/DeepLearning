@@ -58,7 +58,38 @@ To run locally, all packages are listed in `requirements.txt`.
 Note that INT8 and INT4 runs require CUDA and will not work on Apple Silicon.
 
 ## **Installation of the webapp**
--
+
+The webapp runs on CPU only. On first launch, the models are downloaded from the Hugging Face Hub (about 2 GB), so the first start takes a few minutes..
+
+**with Docker**
+
+Requirements: Docker and Docker Compose, about 8 GB of RAM.
+
+```bash
+git clone https://github.com/Julianlls/DeepLearning.git
+cd DeepLearning
+docker compose up -d --build
+```
+
+Then open http://localhost:7860
+
+* Logs: `docker compose logs -f`
+* Stop: `docker compose down`
+
+**without Docker**
+
+Requirements: Python 3.12. From the repo root:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install gradio==6.28.0 -r app/requirements.txt
+python -m app.app
+```
+
+Then open http://127.0.0.1:7860
+
+without Docker models are loaded on the first question instead of at startup.
 
 
 ## **Contributors**
