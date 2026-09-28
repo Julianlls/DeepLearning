@@ -217,8 +217,6 @@ The demo runs on a self-hosted Proxmox server (Debian LXC container with Docker)
 * **Single machine on a home connection**: there is no redundancy, so availability depends on the server, the power supply and the home internet line.
 * **Latency is indicative**: the timings in the app are measured on this CPU. On a GPU they would be much lower, and the gaps between precisions would be different.
 
-Run with Docker: `docker compose up -d --build`, then open http://localhost:7860.
-Run without Docker, from the repo root: `pip install gradio -r app/requirements.txt`, then `python -m app.app`.
 
 #### **Limitations**
 
