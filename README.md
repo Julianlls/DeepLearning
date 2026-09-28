@@ -200,7 +200,22 @@ An interactive Gradio demo is self-hosted in Docker on a Proxmox server, behind 
 * `Dockerfile`, `docker-compose.yml`: CPU-only production image. All models are preloaded at startup, and downloaded weights are kept in a volume.
 * `.github/workflows/ci.yml`: on every push, smoke-tests the app and builds the image
 
-bitsandbytes needs CUDA, so the live INT8 option uses PyTorch dynamic quantization on CPU. The INT4 figures come from the benchmark run.
+**Why INT8 differs from the benchmark and INT4 is not live**
+
+The benchmark quantizes with bitsandbytes (`load_in_8bit` / `load_in_4bit`), which needs an NVIDIA GPU with CUDA. The production server has no GPU, so:
+
+* **INT8** uses PyTorch dynamic quantization instead. It is built into PyTorch, runs well on CPU, and behaves like the benchmark: answers are almost unchanged, and the model is about 3× smaller and faster. The app labels it as a CPU method.
+* **INT4** is shown only through the measured benchmark results (charts and table), not live. CPU 4-bit methods exist (e.g. optimum-quanto, ONNX Runtime), but they are a different quantization scheme from bitsandbytes, so the live answers could disagree with the reported scores. On this CPU they would also likely be slower than FP32, because weights are unpacked at every step. Showing them would misrepresent the project's findings.
+
+**Server limitations**
+
+The demo runs on a self-hosted Proxmox server (Debian LXC container with Docker):
+
+* **CPU only**: Intel Core i7-6700K (4 cores / 8 threads, 2015, AVX2 but no AVX-512/VNNI) and no GPU. This rules out bitsandbytes and fast low-bit kernels. flan-t5-large (780M parameters) is not served live either: on this CPU it would roughly triple the memory use and the response time.
+* **Memory**: all six live configurations (2 models × FP32/BF16/INT8) are preloaded, which uses about 5 GB of RAM. The container is capped at 8 GB.
+* **One request at a time**: generation is CPU-bound, so Gradio processes requests in a queue. Simultaneous visitors wait their turn.
+* **Single machine on a home connection**: there is no redundancy, so availability depends on the server, the power supply and the home internet line.
+* **Latency is indicative**: the timings in the app are measured on this CPU. On a GPU they would be much lower, and the gaps between precisions would be different.
 
 Run with Docker: `docker compose up -d --build`, then open http://localhost:7860.
 Run without Docker, from the repo root: `pip install gradio -r app/requirements.txt`, then `python -m app.app`.
