@@ -50,7 +50,6 @@ DeepLearning
 │
 ├── Dockerfile.txt
 ├── docker-compose.yaml
-├── requirements.txt
 ├── README.md
 └── requirements.txt
 
