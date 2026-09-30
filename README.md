@@ -147,5 +147,5 @@ The demo runs on a self-hosted Proxmox server (Debian LXC container with Docker)
 ## **References**
 * https://huggingface.co/google/flan-t5-base
 * https://huggingface.co/google/flan-t5-large
-* https://huggingface.co/datasets/UCLNLP/adversarial_qa
 * https://huggingface.co/docs/bitsandbytes/en/index
+* https://huggingface.co/datasets/UCLNLP/adversarial_qa
